@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: connection-config
+data:
+  pg_host: "postgres-service"
+  pg_port: "5432"
+  pg_db: "dwh_db"
+
+  mqtt_broker: "mosquitto-service"
+  mqtt_port: "1883"
+  mqtt_topic: "DataMgmt"

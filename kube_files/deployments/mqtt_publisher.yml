@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-publisher
+spec:
+  selector:
+    matchLabels:
+      app: mqtt-publisher
+  template:
+    metadata:
+      labels:
+        app: mqtt-publisher
+    spec:
+      containers:
+        - name: mqtt-publisher
+          image: fabianfel/public:dwh_mqtt_publisher
+          imagePullPolicy: Always
+          env:
+            - name: MQTT_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: mqtt_broker
+
+            - name: MQTT_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: mqtt_port
+
+            - name: MQTT_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: mqtt_topic
+
+            # Kann nach Bedarf angepasst werden
+            - name: FIN
+              value: "FFRZG4CB5CJQ2KQLU"

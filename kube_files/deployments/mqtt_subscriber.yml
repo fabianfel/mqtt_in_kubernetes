@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-subscriber
+spec:
+  selector:
+    matchLabels:
+      app: mqtt-subscriber
+  template:
+    metadata:
+      labels:
+        app: mqtt-subscriber
+    spec:
+      containers:
+        - name: mqtt-subscriber
+          image: fabianfel/public:dwh_mqtt_subscriber
+          imagePullPolicy: Always
+          env:
+            - name: PG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: pg_host
+
+            - name: PG_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: pg_port
+
+            - name: PG_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: pg_db
+
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: user
+
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+
+            - name: MQTT_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: mqtt_broker
+
+            - name: MQTT_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: connection-config
+                  key: mqtt_port
